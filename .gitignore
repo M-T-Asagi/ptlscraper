@@ -1,0 +1,4 @@
+*.pem
+.vscode
+__pycache__
+myenv
