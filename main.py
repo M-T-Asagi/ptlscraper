@@ -38,8 +38,11 @@ def base_str(n, radix):
 args = sys.argv
 start_num = 0
 
-if len(args) > 1 and isinstance(args[1], int):
-    start_num = int(args[1])
+if len(args) > 1:
+    try:
+        start_num = int(args[1])
+    except:
+        pass
 
 url_base = "http://p.tl/"
 base_netloc = "p.tl"
@@ -61,7 +64,7 @@ while count < 8886484:
     url = url_base + number
     try:
         res = request.urlopen(url)
-    except (error.URLError, error.HTTPError) as e:
+    except (error.URLError, error.HTTPError, UnicodeEncodeError) as e:
         print('Failed!, ' + url + ',, ' + str(e))
         continue
 
