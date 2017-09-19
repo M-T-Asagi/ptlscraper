@@ -2,7 +2,7 @@ from urllib import request, error
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from time import sleep
-import math
+import math, sys
 
 def base_str(n, radix):
     digits = "0123456789abcdefghijklmnopqrstuvwxyz"
@@ -35,12 +35,20 @@ def base_str(n, radix):
         s = '-' + s
     return s        
 
+args = sys.argv
+start_num = 0
+
+if len(args) > 1 and isinstance(args[1], int):
+    start_num = int(args[1])
+
 url_base = "http://p.tl/"
 base_netloc = "p.tl"
 
 count = 0
-index = 0
+index = start_num
 errorCount = 0
+
+print("result, ptl, original, others")
 
 while count < 8886484:
     if errorCount > 100:
@@ -54,7 +62,7 @@ while count < 8886484:
     try:
         res = request.urlopen(url)
     except (error.URLError, error.HTTPError) as e:
-        print('Error! "' + url + '" is ' + str(e))
+        print('Failed!, ' + url + ',, ' + str(e))
         continue
 
     data = res.read()
@@ -62,16 +70,20 @@ while count < 8886484:
     if urlparse(res.url).netloc == base_netloc:
         try:
             soup = BeautifulSoup(data, "html.parser")
+            elem = soup.find("a", class_="jump")
         except Exception as e:
-            print('Error! "' + url + '" is ' + str(e))
+            print('Failed!, ' + url + ',, ' + str(e))
             continue
-
-        print('Success! "' + url + '" is converted from "' + soup.find("a", class_="jump").get("href") + '"')
+        
+        if elem is not None:
+            print('Success!, ' + url + ', ' + soup.find("a", class_="jump").get("href") + ',')
+        else:
+            print('Failed!, ' + url + ', ' +  res.url + ', invalid page')
     else:
-        print('Success! "' + url + '" is converted from "' +  res.url + '"')
+        print('Success, ' + url + ',' +  res.url + ', ')
 
     count += 1
     errorCount = 0
     sleep(0.001)
 
-print("all of process are finished.")
+print("all of,  process, are, finished.")
