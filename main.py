@@ -75,7 +75,7 @@ while count < 8886484:
     url = url_base + number
     try:
         res = request.urlopen(url)
-    except (error.URLError, error.HTTPError, UnicodeEncodeError) as e:
+    except (error.URLError, error.HTTPError, UnicodeEncodeError, UnicodeError) as e:
         print('Failed!, ' + url + ',, ' + str(e))
         continue
 
