@@ -2,7 +2,7 @@ from urllib import request, error
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 from time import sleep
-import math, sys
+import math, sys, re
 
 def base_str(n, radix):
     digits = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -53,6 +53,8 @@ index = start_num
 error_count = 0
 radix = 62 if use_big else 36
 
+big_pattern = re.compile(".*[A-Z]+")
+
 print("result, ptl, original, others")
 
 while count < 8886484:
@@ -63,6 +65,13 @@ while count < 8886484:
     index += 1
     error_count += 1
     number = base_str(i, radix).zfill(4)
+
+    if use_big:
+        if big_pattern.match(number) is None:
+            continue
+    elif big_pattern.match(number) is not None:
+        continue
+
     url = url_base + number
     try:
         res = request.urlopen(url)
